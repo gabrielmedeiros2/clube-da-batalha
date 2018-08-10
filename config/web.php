@@ -18,10 +18,17 @@ $config = [
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
+//            'class' => 'yii\caching\MemCache',
         ],
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+        ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [            
+            ],        
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
