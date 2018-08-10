@@ -17,8 +17,8 @@ $config = [
             'cookieValidationKey' => 'clube-da-batalha-cookie',
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
-//            'class' => 'yii\caching\MemCache',
+//            'class' => 'yii\caching\FileCache',   
+            'class' => 'yii\caching\MemCache',
         ],
         'user' => [
             'identityClass' => 'app\models\User',
