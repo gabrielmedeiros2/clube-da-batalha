@@ -62,7 +62,9 @@ class UsuarioController extends Controller
                 $transaction->commit();
                 return $this->redirect(['site/index']);
             }else{
-                $erroMsg = '';
+                $usuario->senha = '';
+                $usuario->repetirSenha = '';
+                $erroMsg = '';                
                 foreach($usuario->errors as $campos){                    
                     foreach($campos as $erro){                        
                         $erroMsg .= '<li>'.$erro.'</li>';

@@ -21,7 +21,7 @@ use Yii;
  */
 class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-    public $repetirSenha;
+    public $repetirSenha;    
     /**
      * @inheritdoc
      */
@@ -37,8 +37,10 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['login', 'senha', 'email', 'repetirSenha'], 'required'],            
-            [['perfil_id'], 'integer'],
+            [['perfil_id'], 'integer'],            
+            [['email'], 'unique'],
             [['login', 'senha'], 'string', 'max' => 50],
+            [['login'], 'unique', 'targetAttribute' => ['usernameLowercase' => 'lower(login)']],
             [['email'], 'string', 'max' => 75],
             [['email'], 'email'],
             [['foto_url'], 'string', 'max' => 150],
@@ -63,6 +65,11 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
+    public function getUsernameLowercase()
+    {
+        return strtolower($this->login);
+    }
+    
     public function afterValidate() {
         $this->senha = strtoupper(md5($this->senha));
     }
