@@ -19,8 +19,9 @@ use Yii;
  * @property UsuarioBatalha[] $usuarioBatalhas
  * @property UsuarioTorneio[] $usuarioTorneios
  */
-class Usuario extends \yii\db\ActiveRecord
+class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+    public $repetirSenha;
     /**
      * @inheritdoc
      */
@@ -35,12 +36,14 @@ class Usuario extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['perfil_id'], 'default', 'value' => null],
+            [['login', 'senha', 'email', 'repetirSenha'], 'required'],            
             [['perfil_id'], 'integer'],
             [['login', 'senha'], 'string', 'max' => 50],
             [['email'], 'string', 'max' => 75],
+            [['email'], 'email'],
             [['foto_url'], 'string', 'max' => 150],
             [['perfil_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perfil::className(), 'targetAttribute' => ['perfil_id' => 'id']],
+            [['senha'], 'compare', 'compareAttribute'=>'repetirSenha']
         ];
     }
 
@@ -56,7 +59,12 @@ class Usuario extends \yii\db\ActiveRecord
             'senha' => 'Senha',
             'email' => 'Email',
             'foto_url' => 'Foto Url',
+            'repetirSenha' => 'Repita sua senha'
         ];
+    }
+
+    public function afterValidate() {
+        $this->senha = strtoupper(md5($this->senha));
     }
 
     /**
@@ -89,5 +97,83 @@ class Usuario extends \yii\db\ActiveRecord
     public function getUsuarioTorneios()
     {
         return $this->hasMany(UsuarioTorneio::className(), ['usuario_id' => 'id']);
+    }
+    
+    //Autenticação
+    
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        $usuario = Usuario::findOne(['id'=>$id]);        
+        return isset($usuario) ? new static($usuario) : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        foreach (self::$users as $user) {
+            if ($user['accessToken'] === $token) {
+                return new static($user);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        $usuario = Usuario::find()->all();
+        foreach ($usuario as $user) {
+            if (strcasecmp($user->login, $username) === 0) {                
+                return new static($user);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return false;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return $this->senha === strtoupper(md5($password));
     }
 }

@@ -1,6 +1,6 @@
 <head>
-    <title>Clube da Batalha</title>
-    <link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700|Open+Sans:300,400,600,700" rel="stylesheet">
+    <title>Clube da Batalha</title>    
+    <!--<link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700|Open+Sans:300,400,600,700" rel="stylesheet">-->
     <link href="<?= Yii::$app->urlManager->baseUrl; ?>/flattern/css/bootstrap.css" rel="stylesheet" />
     <link href="<?= Yii::$app->urlManager->baseUrl; ?>/flattern/css/bootstrap-responsive.css" rel="stylesheet" />
     <link href="<?= Yii::$app->urlManager->baseUrl; ?>/flattern/css/fancybox/jquery.fancybox.css" rel="stylesheet">
