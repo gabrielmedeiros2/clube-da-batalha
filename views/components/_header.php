@@ -17,46 +17,7 @@ use yii\helpers\Html;
                             <li><?= Html::a('Sair', ['site/logout'], ['data' => ['method' => 'post', 'params'=>['_csrf'=>Yii::$app->request->getCsrfToken()]]]) ?></li>
                         <?php }?>
                     </ul>
-                </div>
-<!-- Signup Modal -->
-                <div id="mySignup" class="modal styled hide fade" tabindex="-1" role="dialog" aria-labelledby="mySignupModalLabel" aria-hidden="true">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 id="mySignupModalLabel">Crie sua <strong>conta</strong></h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal">
-                            <div class="control-group">
-                                <label class="control-label" for="usuario-nome">Login</label>
-                                <div class="controls">
-                                    <input type="text" id="inputEmail" placeholder="Email">
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="inputSignupPassword">Password</label>
-                                <div class="controls">
-                                    <input type="password" id="inputSignupPassword" placeholder="Password">
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="inputSignupPassword2">Confirm Password</label>
-                                <div class="controls">
-                                    <input type="password" id="inputSignupPassword2" placeholder="Password">
-                                </div>
-                            </div>                            
-                            <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
-                            <div class="control-group">
-                                <div class="controls">
-                                    <button type="submit" class="btn">Sign up</button>
-                                </div>
-                                <p class="aligncenter margintop20">
-                                    Already have an account? <a href="#mySignin" data-dismiss="modal" aria-hidden="true" data-toggle="modal">Sign in</a>
-                                </p>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- end signup modal -->                
+                </div>              
                 <!-- Sign in Modal -->
                 <div id="mySignin" class="modal styled hide fade" tabindex="-1" role="dialog" aria-labelledby="mySigninModalLabel" aria-hidden="true">
                     <div class="modal-header">
@@ -129,12 +90,8 @@ use yii\helpers\Html;
                     <div class="navigation">
                         <nav>
                             <ul class="nav topnav">
-                                <li class="dropdown active">
-                                    <a href="<?=Url::toRoute('site/index')?>">Home <i class="icon-angle-down"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="index-alt2.html">Homepage 2</a></li>
-                                        <li><a href="index-alt3.html">Homepage 3</a></li>
-                                    </ul>
+                                <li class="active">
+                                    <a href="<?=Url::toRoute('site/index')?>">Página Inicial</a>                                   
                                 </li>
                                 <li class="dropdown">
                                     <a href="#">Features <i class="icon-angle-down"></i></a>
@@ -181,9 +138,19 @@ use yii\helpers\Html;
                                         <li><a href="post-right-sidebar.html">Post right sidebar</a></li>
                                     </ul>
                                 </li>
-                                <li>
-                                    <a href="contact.html">Contact </a>
-                                </li>
+                                <?php if(!empty(Yii::$app->user->identity->id)){?>
+                                    <?php if(Yii::$app->user->identity->perfil_id == 1){?>
+                                        <li class="dropdown">
+                                            <a href="#">Área Administrativa<i class="icon-angle-down"></i></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="<?= Url::toRoute('admin/usuario-index')?>">Gerenciar Usuários</a></li>
+                                                <li><a href="#">Gerenciar Notícias</a></li>
+                                                <li><a href="#">Gerenciar Torneios</a></li>
+                                                <li><a href="#">Gerenciar Rankings</a></li>                                        
+                                            </ul>                                    
+                                        </li>
+                                    <?php }?>
+                                <?php }?>
                             </ul>
                         </nav>
                     </div>

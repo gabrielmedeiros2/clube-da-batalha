@@ -54,6 +54,7 @@ class UsuarioController extends Controller
     
     public function actionCadastro(){
         $usuario = new Usuario();        
+        $usuario->scenario = 'create';
         if($usuario->load(Yii::$app->request->post())){
             $transaction = Yii::$app->db->beginTransaction();
             $usuario->perfil_id = 2;

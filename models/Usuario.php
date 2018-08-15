@@ -36,7 +36,8 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['login', 'senha', 'email', 'repetirSenha'], 'required'],            
+            [['login', 'senha', 'email'], 'required'],
+            [['repetirSenha'], 'required', 'on' => 'create'],
             [['perfil_id'], 'integer'],            
             [['email'], 'unique'],
             [['login', 'senha'], 'string', 'max' => 50],
@@ -45,7 +46,7 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['email'], 'email'],
             [['foto_url'], 'string', 'max' => 150],
             [['perfil_id'], 'exist', 'skipOnError' => true, 'targetClass' => Perfil::className(), 'targetAttribute' => ['perfil_id' => 'id']],
-            [['senha'], 'compare', 'compareAttribute'=>'repetirSenha']
+            [['senha'], 'compare', 'compareAttribute'=>'repetirSenha', 'on'=>'create']
         ];
     }
 
@@ -56,11 +57,11 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             'id' => 'ID',
-            'perfil_id' => 'Perfil ID',
+            'perfil_id' => 'Perfil',
             'login' => 'Login',
             'senha' => 'Senha',
             'email' => 'Email',
-            'foto_url' => 'Foto Url',
+            'foto_url' => 'Trainer Card',
             'repetirSenha' => 'Repita sua senha'
         ];
     }
@@ -71,7 +72,9 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
     
     public function afterValidate() {
-        $this->senha = strtoupper(md5($this->senha));
+        if($this->scenario == 'create'){
+            $this->senha = strtoupper(md5($this->senha));
+        }
     }
 
     /**
@@ -180,7 +183,7 @@ class Usuario extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      * @return bool if password provided is valid for current user
      */
     public function validatePassword($password)
-    {
+    {        
         return $this->senha === strtoupper(md5($password));
     }
 }

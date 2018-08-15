@@ -122,4 +122,16 @@ $this->registerJsFile(Yii::$app->urlManager->baseUrl . '/js/flash-modal-fade.js'
         </div>
     </div>           
 </div>
+<?php Yii::$app->session->setFlash('sucesso', null)?>
+<?php } else if(Yii::$app->session->hasFlash('temErro')){ ?>
+<div id="modalFlash" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mySignupModalLabel" aria-hidden="true">        
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="alert alert-danger alert-dismissible" style="margin-bottom: 0px !important;" role="alert">                
+                <strong><?= Yii::$app->session->getFlash('temErro')?></strong>
+            </div>
+        </div>
+    </div>
+</div>
+<?php Yii::$app->session->setFlash('temErro', null)?>
 <?php }?>

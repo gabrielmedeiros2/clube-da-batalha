@@ -85,13 +85,13 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            Yii::$app->session->setFlash('sucesso', 'Bem-Vindo ao Clube da Batalha');            
+        }else{
+            Yii::$app->session->setFlash('temErro', 'Login ou Senha incorretos');
         }
 
         $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->redirect('index');
     }
 
     /**
@@ -102,7 +102,7 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
+        
         return $this->goHome();
     }
 

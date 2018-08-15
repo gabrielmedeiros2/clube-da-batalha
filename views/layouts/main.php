@@ -27,7 +27,6 @@ AppAsset::register($this);
     
 <?php $this->endBody() ?>
 </body>
-<script src="<?= Yii::$app->urlManager->baseUrl; ?>/flattern/js/jquery.js"></script>
 <script src="<?= Yii::$app->urlManager->baseUrl; ?>/flattern/js/jquery.easing.1.3.js"></script>
 <script src="<?= Yii::$app->urlManager->baseUrl; ?>/flattern/js/bootstrap.js"></script>
 <script src="<?= Yii::$app->urlManager->baseUrl; ?>/flattern/js/jcarousel/jquery.jcarousel.min.js"></script>
