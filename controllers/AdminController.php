@@ -91,7 +91,7 @@ class AdminController extends Controller
             ]);
             $retorno = Uploader::upload(Yii::$app->basePath.'/web/images-upload/trainer-card/trainer-'.$usuario->login.'-'.$usuario->id.'.' . $arquivo->extension, ['public_id' => 'trainer-'.$usuario->login.'-'.$usuario->id, 'invalidate' => true, 'folder'=>'trainer-card']);
             if(!empty($retorno)){
-                unlink(Yii::$app->basePath.'/web/images-upload/trainer-card/trainer-'.$usuario->login.'-'.$usuario->id.'.' . $arquivo->extension);
+//                unlink(Yii::$app->basePath.'/web/images-upload/trainer-card/trainer-'.$usuario->login.'-'.$usuario->id.'.' . $arquivo->extension);
                 $usuario->foto_url = $retorno['public_id'];        
                 if($usuario->save()){
                     $transaction->commit();
