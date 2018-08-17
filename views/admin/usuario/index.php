@@ -15,6 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile(Yii::$app->urlManager->baseUrl . '/js/data-pass-modal.js', ['depends' => [yii\web\JqueryAsset::className()]]);
 $this->registerJsFile(Yii::$app->urlManager->baseUrl . '/js/flash-modal-fade.js', ['depends' => [yii\web\JqueryAsset::className()]]);
+
+Cloudinary::config([
+    'cloud_name' => 'clubedabatalha',
+    'api_key' => '925316213494833',
+    'api_secret' => 'OYakjaCrTOtio21whA0Zo36SHAc'
+]);
 ?>
 <div class="usuario-index">
     <section id="inner-headline">
@@ -35,7 +41,8 @@ $this->registerJsFile(Yii::$app->urlManager->baseUrl . '/js/flash-modal-fade.js'
         </div>
     </section>
     <section id="content">
-        <div class="container">            
+        <div class="container">
+            <div class="table-responsive">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -54,9 +61,9 @@ $this->registerJsFile(Yii::$app->urlManager->baseUrl . '/js/flash-modal-fade.js'
                         'format' => 'raw',
                         'value' => function($data){
                             if(!empty($data->foto_url)){
-                                return  '<a class="hover-wrap fancybox" data-fancybox-group="gallery" href="'.Yii::$app->urlManager->baseUrl.'/images-upload/trainer-card/'.$data->foto_url.'" title="Trainer Card">'
-                                      . $data->foto_url
-                                      . '</a> <img src="#" alt="Pokémon Trainer '.$data->login.'" style="display:none"/>';
+                                return  '<a class="hover-wrap fancybox" data-fancybox-group="gallery" href="http://res.cloudinary.com/clubedabatalha/image/upload/'.$data->foto_url.'.jpg" title="Trainer Card">'
+                                      .  explode('/',$data->foto_url)[1] . cl_image_tag($data->foto_url, ['alt' => "Pokémon Trainer $data->login", 'style'=>'display:none', 'class'=>'animate scale animated'])                                      
+                                      . '</a>' ;
                             }else{
                                 return 'Trainer Card ainda não cadastrado';
                             }
@@ -78,7 +85,8 @@ $this->registerJsFile(Yii::$app->urlManager->baseUrl . '/js/flash-modal-fade.js'
                     ],
                 ],
             ]); ?>
-        </div>        
+            </div>
+        </div>
     </section>
 </div>
 
