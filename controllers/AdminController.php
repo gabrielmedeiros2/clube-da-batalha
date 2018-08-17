@@ -83,31 +83,24 @@ class AdminController extends Controller
         $usuario = $this->findUsuario(Yii::$app->request->post()['usuario-id']);        
         $usuario->load(Yii::$app->request->post());        
         $arquivo = UploadedFile::getInstance($usuario, 'foto_url');                 
-        if($arquivo->saveAs(Yii::$app->basePath.'/web/images-upload/trainer-card/trainer-'.$usuario->login.'-'.$usuario->id.'.' . $arquivo->extension)){
-            Cloudinary::config([
-                'cloud_name' => 'clubedabatalha',
-                'api_key' => '925316213494833',
-                'api_secret' => 'OYakjaCrTOtio21whA0Zo36SHAc'
-            ]);
-            $retorno = Uploader::upload(Yii::$app->basePath.'/web/images-upload/trainer-card/trainer-'.$usuario->login.'-'.$usuario->id.'.' . $arquivo->extension, ['public_id' => 'trainer-'.$usuario->login.'-'.$usuario->id, 'invalidate' => true, 'folder'=>'trainer-card']);
-            if(!empty($retorno)){
-//                unlink(Yii::$app->basePath.'/web/images-upload/trainer-card/trainer-'.$usuario->login.'-'.$usuario->id.'.' . $arquivo->extension);
-                $usuario->foto_url = $retorno['public_id'];        
-                if($usuario->save()){
-                    $transaction->commit();
-                    Yii::$app->session->setFlash('sucesso', 'Trainer Card salvo com sucesso');
-                }else{
-                    $transaction->rollBack();
-                    Yii::$app->session->setFlash('temErro', 'Erro ao salvar o Trainer Card');
-                }  
+        Cloudinary::config([
+            'cloud_name' => 'clubedabatalha',
+            'api_key' => '925316213494833',
+            'api_secret' => 'OYakjaCrTOtio21whA0Zo36SHAc'
+        ]);            
+        $retorno = Uploader::upload($arquivo->tempName, ['public_id' => 'trainer-'.$usuario->login.'-'.$usuario->id, 'invalidate' => true, 'folder'=>'trainer-card']);
+        if(!empty($retorno)){
+            $usuario->foto_url = $retorno['public_id'];        
+            if($usuario->save()){
+                $transaction->commit();
+                Yii::$app->session->setFlash('sucesso', 'Trainer Card salvo com sucesso');
             }else{
-                Yii::$app->session->setFlash('temErro', 'Erro ao tentar fazer upload do arquivo');
-            }                 
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('temErro', 'Erro ao salvar o Trainer Card');
+            }  
         }else{
-            $transaction->rollBack();
             Yii::$app->session->setFlash('temErro', 'Erro ao tentar fazer upload do arquivo');
-        }            
-                          
+        }                                           
         $this->redirect('usuario-index');
     }
     
